@@ -2,7 +2,7 @@ CC=riscv64-unknown-elf-gcc
 CFLAGS=-Wall -O2
 LDFLAGS=-static
 
-PROGRAMS=simple matrix prefetch
+PROGRAMS=simple matrix prefetch hello exception
 EXECUTABLES=$(addsuffix .riscv,$(PROGRAMS))
 
 all: $(EXECUTABLES)
