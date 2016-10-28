@@ -21,6 +21,7 @@ int main(void)
 	dma_write_cr(NSEGMENTS, 1);
 	dma_write_cr(SRC_STRIDE, 0);
 	dma_write_cr(DST_STRIDE, 0);
+	dma_transfer(dst_array, src_array);
 	asm volatile ("fence");
 	if (dma_read_cr(RESP_STATUS) != NO_ERROR) {
 		fprintf(stderr, "error in DMA transfer\n");
