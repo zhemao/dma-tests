@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define TEST_SIZE 400
+#define TEST_SIZE 600
 
 int src_array[TEST_SIZE];
 int dst_array[TEST_SIZE];
@@ -22,18 +22,8 @@ int main(void)
 	dma_write_cr(SRC_STRIDE, 0);
 	dma_write_cr(DST_STRIDE, 0);
 	asm volatile ("fence");
-	dma_set_cr(ACCEL_CTRL, CTRL_ALLOC_PAUSE);
-	dma_transfer(dst_array, src_array);
-	asm volatile ("fence");
-	if (dma_read_cr(RESP_STATUS) != PAUSED) {
-		fprintf(stderr, "unexpectedly not paused\n");
-		return -1;
-	}
-	dma_clear_cr(ACCEL_CTRL, CTRL_ALLOC_PAUSE);
-	dma_resume();
-	asm volatile ("fence");
 	if (dma_read_cr(RESP_STATUS) != NO_ERROR) {
-		fprintf(stderr, "unexpectedly still paused\n");
+		fprintf(stderr, "error in DMA transfer\n");
 		return -1;
 	}
 #else
