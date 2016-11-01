@@ -3,18 +3,22 @@ CFLAGS=-Wall -O2 -DDMA
 LDFLAGS=-static
 OBJDUMP=riscv64-unknown-elf-objdump
 LNX_CC=riscv64-unknown-linux-gnu-gcc
+LNX_OBJDUMP=riscv64-unknown-linux-gnu-objdump
 
 PROGRAMS=simple matrix prefetch hello
 LNX_PROGRAMS=mmap exception simple matrix
 EXECUTABLES=$(addsuffix .pk.riscv,$(PROGRAMS)) $(addsuffix .lnx.riscv,$(LNX_PROGRAMS))
-DUMPS=$(addsuffix .dump,$(PROGRAMS))
+DUMPS=$(addsuffix .pk.dump,$(PROGRAMS)) $(addsuffix .lnx.dump,$(LNX_PROGRAMS))
 
 all: $(EXECUTABLES)
 
 dump: $(DUMPS)
 
-%.dump: %.riscv
+%.pk.dump: %.pk.riscv
 	$(OBJDUMP) -d $< > $@
+
+%.lnx.dump: %.lnx.riscv
+	$(LNX_OBJDUMP) -d $< > $@
 
 %.pk.riscv: %.pk.o
 	$(CC) $< $(LDFLAGS) -o $@
